@@ -43,9 +43,9 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 - Setup docker environment, and clone repository
 - Create snakeoil certificates
     - Run "make"  in raddb/certs/
-- Modify clients.conf
+- Modify raddb/clients.conf
     - Change one of the subnets to match your client that will be connecting to your RADIUS server
-- Modify eap
+- Modify raddb/mods-enabled/eap
     - The primary lines that need to be updated are:
         - private_key_file
         - private_key_password
@@ -57,6 +57,9 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
         - tls_min_version
         - tls_max_version
         - use_nonce
+- For testing connectivity, modify raddb/mods-config/files/authorize
+	- Add user/password combo and uncomment necessary protocols in raddb/mods-enabled/eap
+   		- See https://networkradius.com/doc/FreeRADIUS-Implementation-Ch5.pdf
     
 - run start-docker.sh
     - This will stop, delete, and recreate the docker containers every time you run it, replacing it with the latest version from the freeradius/freeradius-server docker image
