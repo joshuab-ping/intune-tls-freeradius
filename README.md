@@ -29,4 +29,95 @@ There is a example under mods-config/*/authorize on how to setup vlan to the TLS
 
 Note that the username that intune asigns to the wifi profiles is added in that file and AFAIK cannot be changed.
 
+# WiFi Setup Documentation
+## Using Freeradius as RADIUS server, Private CA, and Intune as SCEP client
+### Freeradius
+#### Summary
+- TODO
+#### Configuration and Setup
+##### Docker Environment
+Using https://github.com/annerajb/intune-tls-freeradius as a starting environment.
 
+##### Initial Testing Methodology
+###### RADIUS Server Setup
+- Setup docker environment, and clone repository
+- Create snakeoil certificates
+    - Run "make"  in raddb/certs/
+- Modify clients.conf
+    - Change one of the subnets to match your client that will be connecting to your RADIUS server
+- Modify eap
+    - The primary lines that need to be updated are:
+        - private_key_file
+        - private_key_password
+        - certificate_file
+        - ca_file
+        - ca_path 
+            - .crl file is expected here and auth will not work without it
+    - Other notable lines are:
+        - tls_min_version
+        - tls_max_version
+        - use_nonce
+    
+- run start-docker.sh
+    - This will stop, delete, and recreate the docker containers every time you run it, replacing it with the latest version from the freeradius/freeradius-server docker image
+    - This also starts an interactive session in the docker container running "freeradius -X", which is the debug/verbose mode of freeradius
+
+###### Test Client Setup
+ - Install eapol_test
+    - Linux/Ubuntu
+        - https://wiki.geant.org/display/H2eduroam/Testing+with+eapol_test
+    - Windows build
+        - https://github.com/janetuk/eapol_test
+- Copy client certs to user readable directory
+    - ```mkdir ~/certs/ && cp ./raddb/certs/ ~/certs/```
+    - Example config: tls.conf 
+    ```#
+    #   eapol_test -c {config file} -s {Radius secret} -a {Radius server}
+    #   Ex "eapol_test -c tls.conf -s testing123 -a 192.168.0.10"
+    #   Set also "nostrip" in raddb/proxy.conf, realm "example.com"
+    #   And make it a LOCAL realm.
+    #
+    network={
+	   key_mgmt=WPA-EAP
+	   eap=TLS
+	#  identity="user@example.org"
+    #  User-Name = "intune id"
+	   identity="12345678-1234-1234-1234-123456789012"
+    #  ca_cert="raddb/certs/rsa/ca.pem"
+    #  ca_cert="~/certs/prod/ca.pem"
+       ca_cert="~/certs/ca.crt"
+
+    #  client_cert="raddb/certs/rsa/client.crt"
+    #  client_cert="~/certs/prod/client.crt"
+       client_cert="~/certs/client.crt"
+
+    #   private_key="raddb/certs/rsa/client.key"
+    #   private_key="~/certs/prod/client.key"
+        private_key="~/certs/client.key"
+
+    	private_key_passwd="whatever"
+
+	    phase1="tls_disable_session_ticket=0"
+    }
+```
+
+###### How to Use
+- Create snakeoil certificates
+- Modify clients.conf
+- Modify eap
+- run start-docker.sh
+    - This will stop, delete, and recreate the docker containers every time you run it, replacing it with the latest version from the freeradius/freeradius-server docker image
+    - This also starts an interactive session in the docker container running "freeradius -X", which is the debug/verbose mode of freeradius
+
+### CA Setup
+- Setup environment
+    - TODO
+- Create certificate for server and save to raddb/certs/
+    - Easiest to use .pem file with both private key and cert
+    - You will need to either update the eap file fields (replacing server.pem) with the new certificate name, or you can rename the certificate to match the configuration
+    - Fix permissions (sudo chown -R $USER:$USER ./raddb/certs/)
+- Make sure firewall is allowing inbound traffic to port 1812
+- If testing certificate validation, there may need to be a match between the hostname and the certificate. This was not necessary with the snakeoil certificates during testing
+
+### Intune Setup
+- TODO
