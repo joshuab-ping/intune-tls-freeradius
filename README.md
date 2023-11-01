@@ -71,7 +71,7 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 - Copy client certs to user readable directory
     - ```mkdir ~/certs/ && cp ./raddb/certs/ ~/certs/```
     - Example config: tls.conf 
-    ```#
+```
     #   eapol_test -c {config file} -s {Radius secret} -a {Radius server}
     #   Ex "eapol_test -c tls.conf -s testing123 -a 192.168.0.10"
     #   Set also "nostrip" in raddb/proxy.conf, realm "example.com"
@@ -100,6 +100,7 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 	    phase1="tls_disable_session_ticket=0"
     }
 ```
+
 
 ###### How to Use
 - Create snakeoil certificates
