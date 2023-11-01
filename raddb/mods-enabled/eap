@@ -77,8 +77,8 @@ eap {
 	#  for wireless connections.  It is insecure, and does
 	#  not provide for dynamic WEP keys.
 	#
-	md5 {
-	}
+	#md5 {
+	#}
 
 
 	#  EAP-pwd -- secure password-based authentication
@@ -115,8 +115,8 @@ eap {
 	#  User-Password, or the NT-Password attributes.
 	#  'System' authentication is impossible with LEAP.
 	#
-	leap {
-	}
+	#leap {
+	#}
 
 
 	#  EAP-GTC -- Generic Token Card
@@ -130,7 +130,7 @@ eap {
 	#  the users password will go over the wire in plain-text,
 	#  for anyone to see.
 	#
-	gtc {
+	#gtc {
 		#  The default challenge, which many clients
 		#  ignore..
 		#
@@ -148,8 +148,8 @@ eap {
 		#  configured for the request, and do the
 		#  authentication itself.
 		#
-		auth_type = PAP
-	}
+	#	auth_type = PAP
+	#}
 
 
 	#  Common TLS configuration for TLS-based EAP types
@@ -181,9 +181,9 @@ eap {
 	#  authenticate via EAP-TLS!  This is likely not what you want.
 	#
 	tls-config tls-common {
-		private_key_password = whatever
-		private_key_file = ${certdir}/server.pem
-
+		#private_key_password = whatever
+		#private_key_file = ${certdir}/snakeoil/server.pem
+		private_key_file = ${certdir}/server.key
 		#  If Private key & Certificate are located in
 		#  the same file, then private_key_file &
 		#  certificate_file must contain the same file
@@ -218,7 +218,9 @@ eap {
 		#  give advice which will work everywhere.  Instead,
 		#  we give general guidelines.
 		#
+		#certificate_file = ${certdir}/snakeoil/server.pem
 		certificate_file = ${certdir}/server.pem
+
 
 		#  Trusted Root CA list
 		#
@@ -231,7 +233,8 @@ eap {
 		#  In that case, this CA file should contain
 		#  *one* CA certificate.
 		#
-		ca_file = ${cadir}/ca.pem
+	#	ca_file = ${cadir}/snakeoil/root.crt
+                ca_file = ${cadir}/ca.pem
 
 	 	#  OpenSSL will automatically create certificate chains,
 	 	#  unless we tell it to not do that.  The problem is that
@@ -281,7 +284,7 @@ eap {
 		#
 		#    openssl dhparam -out certs/dh 2048
 		#
-		dh_file = ${certdir}/dh
+	#	dh_file = ${certdir}/dh
 
 		#  If your system doesn't have /dev/urandom,
 		#  you will need to create this file, and
@@ -369,7 +372,7 @@ eap {
 		#  For EAP-FAST, use "ALL:!EXPORT:!eNULL:!SSLv2"
 		#
 		cipher_list = "DEFAULT"
-
+	#	cipher_list = "HIGH"
 		#  If enabled, OpenSSL will use server cipher list
 		#  (possibly defined by cipher_list option above)
 		#  for choosing right cipher suite rather than
@@ -419,8 +422,8 @@ eap {
 		#
 		#  Only for OpenSSL >= 0.9.8.f
 		#
-		ecdh_curve = "prime256v1"
-
+		ecdh_curve = ""
+		#ecdh_curve = "scep384r1"
 		#  Session resumption / fast reauthentication
 		#  cache.
 		#
@@ -557,7 +560,7 @@ eap {
 			#  uncomment this configuration item, and set it
 			#  to "yes".
 			#
-		#	skip_if_ocsp_ok = no
+			skip_if_ocsp_ok = yes
 
 			#  A temporary directory where the client
 			#  certificates are stored.  This directory
@@ -571,7 +574,7 @@ eap {
 			#  You should also delete all of the files
 			#  in the directory when the server starts.
 			#
-		#	tmpdir = /tmp/radiusd
+	#		tmpdir = /var/tmp/radiusd
 
 			#  The command used to verify the client cert.
 			#  We recommend using the OpenSSL command-line
@@ -587,6 +590,8 @@ eap {
 			#  returns.
 			#
 		#	client = "/path/to/openssl verify -CApath ${..ca_path} %{TLS-Client-Cert-Filename}"
+	#	       client = "/usr/bin/openssl verify -CApath ${..ca_path} %{TLS-Client-Cert-Filename}"
+			
 		}
 
 		#  OCSP Configuration
@@ -601,7 +606,7 @@ eap {
 			#  Deleting the entire "ocsp" subsection
 			#  also disables ocsp checking
 			#
-			enable = yes
+			enable = no
 
 			#  The OCSP Responder URL can be automatically
 			#  extracted from the certificate in question.
@@ -628,7 +633,7 @@ eap {
 			# to disable it in the query here.
 			# See http://technet.microsoft.com/en-us/library/cc770413%28WS.10%29.aspx
 			#
-		#	use_nonce = yes
+	#		use_nonce = yes
 
 			# Number of seconds before giving up waiting
 			# for OCSP response. 0 uses system default.
@@ -680,7 +685,7 @@ eap {
 	#
 	#  Surprisingly, it works quite well.
 	#
-	ttls {
+	#ttls {
 		#  Which tls-config section the TLS negotiation parameters
 		#  are in - see EAP-TLS above for an explanation.
 		#
@@ -690,7 +695,7 @@ eap {
 		#  above. If that is done, the tls= option here (and in
 		#  tls above) MUST be commented out.
 		#
-		tls = tls-common
+	#	tls = tls-common
 
 		#  The tunneled EAP session needs a default EAP type
 		#  which is separate from the one for the non-tunneled
@@ -699,7 +704,7 @@ eap {
 		#  EAP conversation, then this configuration entry is
 		#  ignored.
 		#
-		default_eap_type = md5
+	#	default_eap_type = md5
 
 		#  The tunneled authentication request does not usually
 		#  contain useful attributes like 'Calling-Station-Id',
@@ -715,7 +720,7 @@ eap {
 		#
 		#  allowed values: {no, yes}
 		#
-		copy_request_to_tunnel = no
+	#	copy_request_to_tunnel = no
 
 		#  As of version 3.0.5, this configuration item
 		#  is deprecated.  Instead, you should use
@@ -736,7 +741,7 @@ eap {
 		#
 		#  allowed values: {no, yes}
 		#
-		use_tunneled_reply = yes
+	#	use_tunneled_reply = yes
 
 		#  The inner tunneled request can be sent
 		#  through a virtual server constructed
@@ -744,7 +749,7 @@ eap {
 		#
 		#  A virtual server MUST be specified.
 		#
-		virtual_server = "inner-tunnel"
+	#	virtual_server = "inner-tunnel"
 
 		#  This has the same meaning, and overwrites, the
 		#  same field in the "tls" configuration, above.
@@ -766,7 +771,7 @@ eap {
 		#  to be usable for most people.
 		#
 	#	require_client_cert = yes
-	}
+	#}
 
 
 	#  EAP-PEAP
@@ -806,7 +811,7 @@ eap {
 	#  EAP module.  Inside of the TLS/PEAP tunnel, we
 	#  recommend using EAP-MS-CHAPv2.
 	#
-	peap {
+	#peap {
 		#  Which tls-config section the TLS negotiation parameters
 		#  are in - see EAP-TLS above for an explanation.
 		#
@@ -816,7 +821,7 @@ eap {
 		#  above. If that is done, the tls= option here (and in
 		#  tls above) MUST be commented out.
 		#
-		tls = tls-common
+	#	tls = tls-common
 
 		#  The tunneled EAP session needs a default
 		#  EAP type which is separate from the one for
@@ -825,12 +830,12 @@ eap {
 		#  as that is the default type supported by
 		#  Windows clients.
 		#
-		default_eap_type = mschapv2
+	#	default_eap_type = mschapv2
 
 		#  The PEAP module also has these configuration
 		#  items, which are the same as for TTLS.
 		#
-		copy_request_to_tunnel = no
+	#	copy_request_to_tunnel = no
 
 		#  As of version 3.0.5, this configuration item
 		#  is deprecated.  Instead, you should use
@@ -841,7 +846,7 @@ eap {
 		#
 		#  This will cache attributes for the final Access-Accept.
 		#
-		use_tunneled_reply = no
+	#	use_tunneled_reply = no
 
 		#  When the tunneled session is proxied, the
 		#  home server may not understand EAP-MSCHAP-V2.
@@ -856,7 +861,7 @@ eap {
 		#
 		#  A virtual server MUST be specified.
 		#
-		virtual_server = "inner-tunnel"
+	#	virtual_server = "inner-tunnel"
 
 		#  This option enables support for MS-SoH
 		#  see doc/SoH.txt for more info.
@@ -882,7 +887,7 @@ eap {
 		#  be usable for most people.
 		#
 	#	require_client_cert = yes
-	}
+	#}
 
 
 	#  EAP-MSCHAPv2
@@ -898,7 +903,7 @@ eap {
 	#  of MS-CHAPv2 in EAP by Cisco, which FreeRADIUS does not
 	#  currently support.
 	#
-	mschapv2 {
+	#mschapv2 {
 		#  Prior to version 2.1.11, the module never
 		#  sent the MS-CHAP-Error message to the
 		#  client.  This worked, but it had issues
@@ -923,7 +928,7 @@ eap {
 		#  identify it.
 		#
 	#	identity = "FreeRADIUS"
-	}
+	#}
 
 
 	#  EAP-FAST
