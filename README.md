@@ -128,6 +128,7 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 - TODO
 
 ### Manual Windows Profiles
+#### Working Windows 10 Profile
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
@@ -185,3 +186,105 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
       </security>
    </MSM>
 </WLANProfile>
+```
+#### Working Windows 11 Profile
+##### WIP
+```
+<WLANProfile
+	xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+	<name>Shipyard</name>
+	<SSIDConfig>
+		<SSID>
+			<hex>5368697079617264</hex>
+			<name>Test-SSID</name>
+		</SSID>
+		<nonBroadcast>false</nonBroadcast>
+	</SSIDConfig>
+	<connectionType>ESS</connectionType>
+	<connectionMode>manual</connectionMode>
+	<autoSwitch>false</autoSwitch>
+	<MSM>
+		<security>
+			<authEncryption>
+				<authentication>WPA2</authentication>
+				<encryption>AES</encryption>
+				<useOneX>true</useOneX>
+				<FIPSMode
+					xmlns="http://www.microsoft.com/networking/WLAN/profile/v2">false
+				</FIPSMode>
+			</authEncryption>
+			<PMKCacheMode>disabled</PMKCacheMode>
+			<OneX
+				xmlns="http://www.microsoft.com/networking/OneX/v1">
+				<authMode>machine</authMode>
+				<EAPConfig>
+					<EapHostConfig
+						xmlns="http://www.microsoft.com/provisioning/EapHostConfig">
+						<EapMethod>
+							<Type
+								xmlns="http://www.microsoft.com/provisioning/EapCommon">13
+							</Type>
+							<VendorId
+								xmlns="http://www.microsoft.com/provisioning/EapCommon">0
+							</VendorId>
+							<VendorType
+								xmlns="http://www.microsoft.com/provisioning/EapCommon">0
+							</VendorType>
+							<AuthorId
+								xmlns="http://www.microsoft.com/provisioning/EapCommon">0
+							</AuthorId>
+						</EapMethod>
+						<Config>
+							<Eap
+								xmlns="http://www.microsoft.com/provisioning/BaseEapConnectionPropertiesV1">
+								<Type>13</Type>
+								<EapType
+									xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV1">
+									<CredentialsSource>
+										<CertificateStore>
+											<SimpleCertSelection>true</SimpleCertSelection>
+										</CertificateStore>
+									</CredentialsSource>
+									<ServerValidation>
+										<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
+										<ServerNames>*INSERT SERVER NAME HERE* ex. radius-test.example.com</ServerNames>
+										<TrustedRootCA>*INSERT SERVER CERTIFICATE THUMBPRINT HERE*</TrustedRootCA>
+									</ServerValidation>
+									<DifferentUsername>false</DifferentUsername>
+									<PerformServerValidation
+										xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV2">true
+									</PerformServerValidation>
+									<AcceptServerName
+										xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV2">true
+									</AcceptServerName>
+									<TLSExtensions
+										xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV2">
+										<FilteringInfo
+											xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV3">
+											<AllPurposeEnabled>false</AllPurposeEnabled>
+											<CAHashList Enabled="true">
+												<IssuerHash>*INSERT CA HASH HERE*</IssuerHash>
+											</CAHashList>
+											<EKUMapping>
+												<EKUMap>
+													<EKUName>Client Authentication</EKUName>
+													<EKUOID>1.3.6.1.5.5.7.3.2</EKUOID>
+												</EKUMap>
+											</EKUMapping>
+											<ClientAuthEKUList Enabled="true">
+												<EKUMapInList>
+													<EKUName>Client Authentication</EKUName>
+												</EKUMapInList>
+											</ClientAuthEKUList>
+										</FilteringInfo>
+									</TLSExtensions>
+								</EapType>
+							</Eap>
+						</Config>
+					</EapHostConfig>
+				</EAPConfig>
+			</OneX>
+		</security>
+	</MSM>
+</WLANProfile>
+```
