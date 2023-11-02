@@ -126,3 +126,62 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 
 ### Intune Setup
 - TODO
+
+### Manual Windows Profiles
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+   <name>Shipyard</name>
+   <SSIDConfig>
+      <SSID>
+         <hex>5368697079617264</hex>
+         <name>Test-SSID</name>
+      </SSID>
+      <nonBroadcast>false</nonBroadcast>
+   </SSIDConfig>
+   <connectionType>ESS</connectionType>
+   <connectionMode>manual</connectionMode>
+   <autoSwitch>false</autoSwitch>
+   <MSM>
+      <security>
+         <authEncryption>
+            <authentication>WPA2</authentication>
+            <encryption>AES</encryption>
+            <useOneX>true</useOneX>
+         </authEncryption>
+         <OneX xmlns="http://www.microsoft.com/networking/OneX/v1">
+            <authMode>machine</authMode>
+            <EAPConfig>
+               <EapHostConfig xmlns="http://www.microsoft.com/provisioning/EapHostConfig">
+                  <EapMethod>
+                     <Type xmlns="http://www.microsoft.com/provisioning/EapCommon">13</Type>
+                     <VendorId xmlns="http://www.microsoft.com/provisioning/EapCommon">0</VendorId>
+                     <VendorType xmlns="http://www.microsoft.com/provisioning/EapCommon">0</VendorType>
+                     <AuthorId xmlns="http://www.microsoft.com/provisioning/EapCommon">0</AuthorId>
+                  </EapMethod>
+                  <Config>
+                     <Eap xmlns="http://www.microsoft.com/provisioning/BaseEapConnectionPropertiesV1">
+                        <Type>13</Type>
+                        <EapType xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV1">
+                           <CredentialsSource>
+                              <CertificateStore>
+                                 <SimpleCertSelection>true</SimpleCertSelection>
+                              </CertificateStore>
+                           </CredentialsSource>
+                           <ServerValidation>
+                              <DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
+                              <ServerNames />
+                              <TrustedRootCA>*INSERT SERVER THUMBPRINT HERE*</TrustedRootCA>
+                           </ServerValidation>
+                           <DifferentUsername>false</DifferentUsername>
+                           <PerformServerValidation xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV2">true</PerformServerValidation>
+                           <AcceptServerName xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV2">false</AcceptServerName>
+                        </EapType>
+                     </Eap>
+                  </Config>
+               </EapHostConfig>
+            </EAPConfig>
+         </OneX>
+      </security>
+   </MSM>
+</WLANProfile>
