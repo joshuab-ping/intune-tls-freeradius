@@ -1,3 +1,4 @@
+# Forked from https://github.com/annerajb/intune-tls-freeradius
 This is a Dockerfile that starts a freeradius server configured for doing EAP-TLS with the provided certificates.
 TODO: test if we can remove the private key of the CA and this still works. 
    This will require to generate the CSR by hand instead of using make  
