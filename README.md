@@ -172,7 +172,7 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
                            <ServerValidation>
                               <DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
                               <ServerNames />
-                              <TrustedRootCA>*INSERT SERVER THUMBPRINT HERE*</TrustedRootCA>
+                              <TrustedRootCA>*INSERT ROOT CA THUMBPRINT HERE*</TrustedRootCA>
                            </ServerValidation>
                            <DifferentUsername>false</DifferentUsername>
                            <PerformServerValidation xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV2">true</PerformServerValidation>
@@ -248,7 +248,7 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 									<ServerValidation>
 										<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
 										<ServerNames>*INSERT SERVER NAME HERE* ex. radius-test.example.com</ServerNames>
-										<TrustedRootCA>*INSERT SERVER CERTIFICATE THUMBPRINT HERE*</TrustedRootCA>
+										<TrustedRootCA>*INSERT ROOT CA CERTIFICATE THUMBPRINT HERE*</TrustedRootCA>
 									</ServerValidation>
 									<DifferentUsername>false</DifferentUsername>
 									<PerformServerValidation
@@ -263,7 +263,7 @@ Using https://github.com/annerajb/intune-tls-freeradius as a starting environmen
 											xmlns="http://www.microsoft.com/provisioning/EapTlsConnectionPropertiesV3">
 											<AllPurposeEnabled>false</AllPurposeEnabled>
 											<CAHashList Enabled="true">
-												<IssuerHash>*INSERT CA HASH HERE*</IssuerHash>
+												<IssuerHash>*INSERT INTERMEDIATE CA HASH HERE*</IssuerHash>
 											</CAHashList>
 											<EKUMapping>
 												<EKUMap>
